@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.igor-suhorukov</groupId>
+    <artifactId>aether-grape</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>proguard</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <obfuscate>false</obfuscate>
+                    <options>
+                        <option>-dontobfuscate</option>
+                        <option>-ignorewarnings</option>
+                        <option>-keep public class com.github.igorsuhorukov.AetherEngine{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.grape.AetherGrapeEngineFactory{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.grape.GrapeEngineInstaller{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.grape.DependencyResolutionContext{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.dependencies.DependencyManagement{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.RepositoryConfigurationFactory{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.dependencies.ManagedDependenciesArtifactCoordinatesResolver{ *; }</option>
+                        <option>-keep public class org.springframework.boot.dependency.tools.Dependency{ *; }</option>
+                        <option>-keep public class org.apache.commons.logging.LogFactory{ *; }</option>
+                        <option>-keep public class org.springframework.util.StringUtils{ *; }</option>
+                        <option>-keep public class org.springframework.util.ObjectUtils{ *; }</option>
+                        <option>-keep public class com.github.igorsuhorukov.ClassLoaderUtil{ *; }</option>
+                    </options>
+                    <assembly>
+                        <inclusions>
+                            <inclusion>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-cli</artifactId>
+                            </inclusion>
+                            <inclusion>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-dependency-tools</artifactId>
+                            </inclusion>
+                        </inclusions>
+                    </assembly>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <outputDirectory>${project.build.directory}/assembly</outputDirectory>
+                                    <excludes>META-INF/services/*</excludes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.5</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <version>1.2.5.RELEASE</version>
+            <artifactId>spring-boot-cli</artifactId>
+        </dependency>
+    </dependencies>
+</project>
