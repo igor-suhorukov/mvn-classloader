@@ -37,6 +37,7 @@
                         <option>-keep public class com.github.smreed.dropship.MavenClassLoader$ClassLoaderBuilder{ *; }</option>
                         <option>-keep public class com.google.common.collect.Iterables{ *; }</option>
                         <option>-keep public class org.apache.commons.logging.LogFactory{ *; }</option>
+                        <option>-keep public class org.apache.commons.logging.impl.*{ *; }</option>
                         <option>-keep public class org.apache.commons.logging.Log{ *; }</option>
                         <option>-keep public class org.codehaus.spice.classman.runtime.JoinClassLoader{ *; }</option>
                     </options>
