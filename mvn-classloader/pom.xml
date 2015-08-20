@@ -50,6 +50,10 @@
                             <shadedPattern>com.github.igorsuhorukov.eclipse</shadedPattern>
                         </relocation>
                         <relocation>
+                            <pattern>jodd</pattern>
+                            <shadedPattern>com.github.igorsuhorukov.jodd</shadedPattern>
+                        </relocation>
+                        <relocation>
                             <pattern>org.sonatype</pattern>
                             <shadedPattern>com.github.igorsuhorukov.sonatype</shadedPattern>
                         </relocation>
@@ -105,6 +109,10 @@
                 <exclusion>
                     <groupId>spice</groupId>
                     <artifactId>spice-classman</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jodd</groupId>
+                    <artifactId>jodd-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

@@ -37,6 +37,7 @@ import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,39 +76,49 @@ public final class MavenClassLoader {
       }
     }
 
-    public URLClassLoader forMavenCoordinatesShared(String groupArtifactVersion) {
+    public URLClassLoader forMavenCoordinates(String groupArtifactVersion, ClassLoader parent) {
       try {
-          ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-          return new URLClassLoader(getArtifactUrls(groupArtifactVersion),
-                  contextClassLoader != null ? contextClassLoader : MavenClassLoader.class.getClassLoader());
+          return new URLClassLoader(getArtifactUrls(groupArtifactVersion), parent);
       } catch (Exception e) {
         throw propagate(e);
       }
     }
 
-    public URL[] getArtifactUrls(String groupArtifactVersion) throws Exception {
-        return getArtifactUrls(groupArtifactVersion, null);
+      public URLClassLoader forMavenCoordinates(MavenDependency[] dependencies, ClassLoader parent) {
+          checkNotNull(dependencies);
+          try {
+              ArrayList<URL> urls = new ArrayList<URL>();
+              for(MavenDependency mavenDependency : dependencies){
+                  urls.addAll(getArtifactUrlsCollection(mavenDependency.getGroupArtifactVersion(), mavenDependency.getExcludes()));
+              }
+              return new URLClassLoader(Iterables.toArray(urls, URL.class), parent);
+          } catch (Exception e) {
+              throw propagate(e);
+          }
+      }
+
+    private URL[] getArtifactUrls(String groupArtifactVersion) throws Exception {
+        return Iterables.toArray(getArtifactUrlsCollection(groupArtifactVersion, null), URL.class);
     }
 
-    public URL[] getArtifactUrls(String groupArtifactVersion, Collection<String> excludes) throws Exception {
-      info("Collecting maven metadata.");
-      CollectRequest collectRequest = createCollectRequestForGAV(groupArtifactVersion);
+      public List<URL> getArtifactUrlsCollection(String groupArtifactVersion, Collection<String> excludes) throws Exception {
+        info("Collecting maven metadata.");
+        CollectRequest collectRequest = createCollectRequestForGAV(groupArtifactVersion);
 
-      info("Resolving dependencies.");
-      List<Artifact> artifacts = collectDependenciesIntoArtifacts(collectRequest, excludes);
+        info("Resolving dependencies.");
+        List<Artifact> artifacts = collectDependenciesIntoArtifacts(collectRequest, excludes);
 
-      info("Building classpath for %s from %d URLs.", groupArtifactVersion, artifacts.size());
-      List<URL> urls = Lists.newArrayListWithExpectedSize(artifacts.size());
-      for (Artifact artifact : artifacts) {
-        urls.add(artifact.getFile().toURI().toURL());
-      }
+        info("Building classpath for %s from %d URLs.", groupArtifactVersion, artifacts.size());
+        List<URL> urls = Lists.newArrayListWithExpectedSize(artifacts.size());
+        for (Artifact artifact : artifacts) {
+            urls.add(artifact.getFile().toURI().toURL());
+        }
 
-      for (String path : Settings.additionalClasspathPaths()) {
-        info("Adding \"%s\" to classpath.", path);
-        urls.add(new File(path).toURI().toURL());
-      }
-
-      return Iterables.toArray(urls, URL.class);
+        for (String path : Settings.additionalClasspathPaths()) {
+            info("Adding \"%s\" to classpath.", path);
+            urls.add(new File(path).toURI().toURL());
+        }
+        return urls;
     }
 
       private CollectRequest createCollectRequestForGAV(String gav) {
@@ -180,8 +191,12 @@ public final class MavenClassLoader {
     return usingCentralRepo().forMavenCoordinates(checkNotNull(gav));
   }
 
-  public static URLClassLoader forMavenCoordinatesShared(String gav) {
-    return usingCentralRepo().forMavenCoordinatesShared(checkNotNull(gav));
+  public static URLClassLoader forMavenCoordinates(String gav, ClassLoader parent) {
+    return usingCentralRepo().forMavenCoordinates(checkNotNull(gav), parent);
+  }
+
+  public static URLClassLoader forMavenCoordinates(MavenDependency[] mavenDependencies, ClassLoader parent) {
+    return usingCentralRepo().forMavenCoordinates(mavenDependencies, parent);
   }
 
   public static ClassLoaderBuilder using(String url) {
