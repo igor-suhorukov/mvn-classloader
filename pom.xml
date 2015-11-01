@@ -13,6 +13,7 @@
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<modules>
+        <module>mvn-classloader-settings</module>
         <module>dropship</module>
         <module>aether-grape</module>
         <module>mvn-classloader</module>
