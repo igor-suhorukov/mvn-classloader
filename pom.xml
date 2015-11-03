@@ -18,6 +18,12 @@
         <module>aether-grape</module>
         <module>mvn-classloader</module>
 	</modules>
+    <scm>
+        <url>https://github.com/igor-suhorukov/mvn-classloader.git</url>
+        <connection>scm:git:git://github.com/igor-suhorukov/mvn-classloader.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/igor-suhorukov/mvn-classloader.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 	<build>
 		<plugins>
 			<plugin>
