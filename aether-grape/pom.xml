@@ -29,6 +29,8 @@
                         <option>-keep public class org.springframework.boot.cli.compiler.grape.AetherGrapeEngineFactory{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.grape.GrapeEngineInstaller{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.grape.DependencyResolutionContext{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.grape.SettingsXmlRepositorySystemSessionAutoConfiguration{ *; }</option>
+                        <option>-keep public class org.springframework.boot.cli.compiler.grape.GrapeRootRepositorySystemSessionAutoConfiguration{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.dependencies.DependencyManagement{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.RepositoryConfigurationFactory{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.dependencies.ManagedDependenciesArtifactCoordinatesResolver{ *; }</option>

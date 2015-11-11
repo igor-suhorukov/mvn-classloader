@@ -62,8 +62,7 @@
                         <filter>
                             <artifact>*:*</artifact>
                             <excludes>
-                                <exclude>META-INF/license/**</exclude>
-                                <exclude>META-INF/**</exclude>
+                                <exclude>META-INF/sisu/*</exclude>
                                 <exclude>LICENSE</exclude>
                                 <exclude>licenses/**</exclude>
                                 <exclude>about.html</exclude>

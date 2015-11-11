@@ -1,0 +1,2 @@
+com.github.igorsuhorukov.springframework.boot.cli.compiler.grape.SettingsXmlRepositorySystemSessionAutoConfiguration
+com.github.igorsuhorukov.springframework.boot.cli.compiler.grape.GrapeRootRepositorySystemSessionAutoConfiguration
