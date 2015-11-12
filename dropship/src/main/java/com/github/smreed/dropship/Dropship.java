@@ -17,7 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Dropship {
 
-  private static MavenClassLoader.ClassLoaderBuilder classLoaderBuilder() {
+  private static ClassLoaderBuilder classLoaderBuilder() {
     Optional<String> override = Settings.mavenRepoUrl();
     if (override.isPresent()) {
       info("Will load artifacts from %s", override);
