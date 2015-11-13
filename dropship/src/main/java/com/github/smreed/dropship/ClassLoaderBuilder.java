@@ -138,6 +138,8 @@ public class ClassLoaderBuilder {
 
         RepositorySystem repositorySystem = newRepositorySystem();
         RepositorySystemSession session = newSession(repositorySystem);
+        RepositoryUtils.configureRepositories(collectRequest, session);
+
         DependencyNode node = repositorySystem.collectDependencies(session, collectRequest).getRoot();
 
         DependencyFilter filter;
