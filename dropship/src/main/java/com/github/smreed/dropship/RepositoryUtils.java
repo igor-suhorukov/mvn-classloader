@@ -4,12 +4,13 @@ import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.repository.RemoteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RepositoryUtils {
 
     public static void configureRepositories(CollectRequest collectRequest, RepositorySystemSession session) {
-        List<RemoteRepository> repositories = collectRequest.getRepositories();
+        List<RemoteRepository> repositories = new ArrayList<RemoteRepository>();
         for(RemoteRepository repository: collectRequest.getRepositories()){
             repositories.add(applyAuthentication(applyProxy(applyMirror(repository, session), session), session));
         }
