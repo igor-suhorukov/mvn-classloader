@@ -32,6 +32,7 @@
                         <option>-keep public class com.github.smreed.dropship.RepositoryUtils{ *; }</option>
                         <option>-keep public class com.github.smreed.dropship.MavenDependency{ *; }</option>
                         <option>-keep public class com.google.common.collect.Iterables{ *; }</option>
+                        <option>-keep public class com.google.common.cache.*{ *; }</option>
                         <option>-keep public class org.apache.commons.logging.LogFactory{ *; }</option>
                         <option>-keep public class org.apache.commons.logging.impl.*{ *; }</option>
                         <option>-keep public class org.apache.commons.logging.Log{ *; }</option>
