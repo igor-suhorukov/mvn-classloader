@@ -28,7 +28,7 @@ import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.filter.AndDependencyFilter;
-import org.eclipse.aether.util.filter.ExclusionsDependencyFilter;
+import org.eclipse.aether.util.filter.PatternExclusionsDependencyFilter;
 import org.eclipse.aether.util.filter.ScopeDependencyFilter;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import org.springframework.boot.cli.compiler.grape.SettingsXmlRepositorySystemSessionAutoConfiguration;
@@ -143,7 +143,7 @@ public class ClassLoaderBuilder {
 
         DependencyFilter filter;
         if (excludes != null && !excludes.isEmpty()) {
-            filter = new AndDependencyFilter(new ScopeDependencyFilter(), new ExclusionsDependencyFilter(excludes));
+            filter = new AndDependencyFilter(new ScopeDependencyFilter(), new PatternExclusionsDependencyFilter(excludes));
         } else {
             filter = new ScopeDependencyFilter();
         }
