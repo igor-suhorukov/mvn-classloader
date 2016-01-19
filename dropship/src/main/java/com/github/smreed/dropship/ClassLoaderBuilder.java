@@ -22,9 +22,7 @@ import org.eclipse.aether.internal.impl.DefaultRepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactResolutionException;
-import org.eclipse.aether.resolution.DependencyRequest;
-import org.eclipse.aether.resolution.DependencyResolutionException;
+import org.eclipse.aether.resolution.*;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
@@ -36,6 +34,7 @@ import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 import org.springframework.boot.cli.compiler.grape.SettingsXmlRepositorySystemSessionAutoConfiguration;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -191,5 +190,19 @@ public class ClassLoaderBuilder {
 
     protected String getScope() {
         return COMPILE_SCOPE;
+    }
+
+    public URL resolveArtifact(String gav) throws PlexusContainerException, ComponentLookupException,
+            ArtifactResolutionException, MalformedURLException {
+
+        RepositorySystem repositorySystem = newRepositorySystem();
+        RepositorySystemSession session = newSession(repositorySystem);
+        ArtifactRequest artifactRequest = new ArtifactRequest();
+        for (RemoteRepository repository : repositories) {
+            artifactRequest.addRepository(RepositoryUtils.applySessionSettingsToRepository(session, repository));
+        }
+        artifactRequest.setArtifact(new DefaultArtifact(gav));
+        ArtifactResult artifactResult = repositorySystem.resolveArtifact(session, artifactRequest);
+        return artifactResult.getArtifact().getFile().toURI().toURL();
     }
 }

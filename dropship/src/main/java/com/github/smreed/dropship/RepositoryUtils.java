@@ -12,9 +12,13 @@ public class RepositoryUtils {
     public static void configureRepositories(CollectRequest collectRequest, RepositorySystemSession session) {
         List<RemoteRepository> repositories = new ArrayList<RemoteRepository>();
         for(RemoteRepository repository: collectRequest.getRepositories()){
-            repositories.add(applyAuthentication(applyProxy(applyMirror(repository, session), session), session));
+            repositories.add(applySessionSettingsToRepository(session, repository));
         }
         collectRequest.setRepositories(repositories);
+    }
+
+    public static RemoteRepository applySessionSettingsToRepository(RepositorySystemSession session, RemoteRepository repository) {
+        return applyAuthentication(applyProxy(applyMirror(repository, session), session), session);
     }
 
     static RemoteRepository applyMirror(RemoteRepository repository, RepositorySystemSession session) {
