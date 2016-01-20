@@ -39,7 +39,7 @@ class Settings {
   }
 
   static String localRepoPath() {
-    return loadProperty("repo.local.path", ".m2/repository");
+    return loadProperty("repo.local.path", System.getProperty("user.home") + "/.m2/repository");
   }
 
   static String dropshipVersion() {
