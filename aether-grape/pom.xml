@@ -45,10 +45,11 @@
                             <inclusion>
                                 <groupId>org.springframework.boot</groupId>
                                 <artifactId>spring-boot-cli</artifactId>
+                                <filter>!org/springframework/boot/cli/compiler/maven/MavenSettingsReader*</filter>
                             </inclusion>
                             <inclusion>
                                 <groupId>org.springframework.boot</groupId>
-                                <artifactId>spring-boot-dependency-tools</artifactId>
+                                <artifactId>spring-boot-loader-tools</artifactId>
                             </inclusion>
                         </inclusions>
                     </assembly>
@@ -105,8 +106,8 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <version>1.2.5.RELEASE</version>
             <artifactId>spring-boot-cli</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
     </dependencies>
 </project>
