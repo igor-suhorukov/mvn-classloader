@@ -40,4 +40,8 @@ public final class MavenClassLoader {
     return new ClassLoaderBuilder(central);
   }
 
+  public static ClassLoaderBuilder usingRemoteRepositories(RemoteRepository... repositories) {
+    return new ClassLoaderBuilder(repositories);
+  }
+
 }
