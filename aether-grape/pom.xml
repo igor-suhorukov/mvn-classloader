@@ -36,6 +36,7 @@
                         <option>-keep public class org.springframework.boot.cli.compiler.dependencies.ManagedDependenciesArtifactCoordinatesResolver{ *; }</option>
                         <option>-keep public class org.springframework.boot.dependency.tools.Dependency{ *; }</option>
                         <option>-keep public class org.apache.commons.logging.LogFactory{ *; }</option>
+                        <option>-keep public class org.springframework.util.Assert{ *; }</option>
                         <option>-keep public class org.springframework.util.StringUtils{ *; }</option>
                         <option>-keep public class org.springframework.util.ObjectUtils{ *; }</option>
                         <option>-keep public class com.github.igorsuhorukov.ClassLoaderUtil{ *; }</option>
