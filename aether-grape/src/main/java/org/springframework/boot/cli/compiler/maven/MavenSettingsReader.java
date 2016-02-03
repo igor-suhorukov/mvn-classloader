@@ -61,6 +61,9 @@ public class MavenSettingsReader {
                     "Maven settings decryption failed. Some Maven repositories may be inaccessible");
             // Continue - the encrypted credentials may not be used
         }
+        if(Boolean.getBoolean("mavenSettings.offline")) {
+            settings.setOffline(true);
+        }
         return new MavenSettings(settings, decrypted);
     }
 
