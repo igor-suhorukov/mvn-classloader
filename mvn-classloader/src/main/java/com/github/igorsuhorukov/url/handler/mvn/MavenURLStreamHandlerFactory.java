@@ -1,4 +1,4 @@
-package com.github.igorsuhorukov;
+package com.github.igorsuhorukov.url.handler.mvn;
 
 import com.github.smreed.dropship.ClassLoaderBuilder;
 import com.github.smreed.dropship.MavenClassLoader;
