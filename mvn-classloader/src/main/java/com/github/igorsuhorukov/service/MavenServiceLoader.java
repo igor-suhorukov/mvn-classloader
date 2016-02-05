@@ -1,38 +1,40 @@
-package com.github.igorsuhorukov.url.handler;
+package com.github.igorsuhorukov.service;
 
 import com.github.smreed.dropship.ClassLoaderBuilder;
 import com.github.smreed.dropship.MavenClassLoader;
 
 import java.net.URLClassLoader;
-import java.net.URLStreamHandlerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-public class URLStreamHandlerUtils {
+public class MavenServiceLoader<T> {
 
-    public static Collection<URLStreamHandlerFactory> loadURLStreamHandlerFactories(String gav){
-        return loadURLStreamHandlerFactories(gav, null);
+    public static<T> Collection<T> loadServices(String gav, Class<T> serviceClass){
+        return loadServices(gav, null, serviceClass);
     }
 
-    public static Collection<URLStreamHandlerFactory> loadURLStreamHandlerFactories(String gav, String repo){
+    public static<T> Collection<T> loadServices(String gav, String repo, Class<T> serviceClass){
         URLClassLoader mavenClassLoader = getClassLoaderBuilder(repo).forMavenCoordinates(gav);
+        return getService(mavenClassLoader, serviceClass);
+    }
+
+    public static <T> Collection<T> getService(ClassLoader classLoader, Class<T> serviceClass) {
         Thread currentThread = Thread.currentThread();
         ClassLoader prevContextClassLoader = currentThread.getContextClassLoader();
-        currentThread.setContextClassLoader(mavenClassLoader);
+        currentThread.setContextClassLoader(classLoader);
         try {
-            ServiceLoader<URLStreamHandlerFactory> serviceLoader
-                    = ServiceLoader.load(URLStreamHandlerFactory.class, mavenClassLoader);
-            Iterator<URLStreamHandlerFactory> iterator = serviceLoader.iterator();
-            Collection<URLStreamHandlerFactory> urlStreamHandlerFactories = new ArrayList<URLStreamHandlerFactory>();
+            ServiceLoader<T> serviceLoader = ServiceLoader.load(serviceClass, classLoader);
+            Iterator<T> iterator = serviceLoader.iterator();
+            Collection<T> services = new ArrayList<T>();
             while (iterator.hasNext()) {
-                URLStreamHandlerFactory urlStreamHandlerFactory = iterator.next();
-                if(urlStreamHandlerFactory!=null){
-                    urlStreamHandlerFactories.add(urlStreamHandlerFactory);
+                T service = iterator.next();
+                if(service!=null){
+                    services.add(service);
                 }
             }
-            return urlStreamHandlerFactories;
+            return services;
         } finally {
             currentThread.setContextClassLoader(prevContextClassLoader);
         }
