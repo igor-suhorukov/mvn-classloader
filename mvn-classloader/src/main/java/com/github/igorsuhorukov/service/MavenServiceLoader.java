@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-public class MavenServiceLoader<T> {
+public class MavenServiceLoader {
 
     public static<T> Collection<T> loadServices(String gav, Class<T> serviceClass){
         return loadServices(gav, null, serviceClass);
@@ -17,10 +17,10 @@ public class MavenServiceLoader<T> {
 
     public static<T> Collection<T> loadServices(String gav, String repo, Class<T> serviceClass){
         URLClassLoader mavenClassLoader = getClassLoaderBuilder(repo).forMavenCoordinates(gav);
-        return getService(mavenClassLoader, serviceClass);
+        return loadServices(mavenClassLoader, serviceClass);
     }
 
-    public static <T> Collection<T> getService(ClassLoader classLoader, Class<T> serviceClass) {
+    public static <T> Collection<T> loadServices(ClassLoader classLoader, Class<T> serviceClass) {
         Thread currentThread = Thread.currentThread();
         ClassLoader prevContextClassLoader = currentThread.getContextClassLoader();
         currentThread.setContextClassLoader(classLoader);
