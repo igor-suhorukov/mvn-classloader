@@ -12,7 +12,7 @@ import java.util.ServiceLoader;
 
 public class URLStreamHandlerUtils {
 
-    public static Collection<? extends URLStreamHandlerFactory> loadURLStreamHandlerFactories(String gav){
+    public static Collection<URLStreamHandlerFactory> loadURLStreamHandlerFactories(String gav){
         return loadURLStreamHandlerFactories(gav, null);
     }
 
