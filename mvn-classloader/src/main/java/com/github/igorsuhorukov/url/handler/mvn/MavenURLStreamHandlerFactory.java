@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.util.logging.Logger;
 
 /**
  * Support URL syntax for maven repository artifacts.
@@ -14,6 +15,8 @@ import java.net.URLStreamHandler;
  * For example mvn:/com.github.igor-suhorukov:aspectj-scripting:pom:1.3?https://jcenter.bintray.com
  */
 public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFactory{
+
+    final static private Logger logger = Logger.getLogger(MavenURLStreamHandlerFactory.class.getName());
 
     public static final String MVN_PROTOCOL = "mvn";
 
@@ -46,7 +49,12 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
         };
         else{
             if(urlStreamHandlerFactory !=null){
-                return urlStreamHandlerFactory.createURLStreamHandler(protocol);
+                try {
+                    return urlStreamHandlerFactory.createURLStreamHandler(protocol);
+                } catch (Exception ignore) {
+                    logger.warning(ignore.getMessage());
+                    return null;
+                }
             } else {
                 return null;
             }
