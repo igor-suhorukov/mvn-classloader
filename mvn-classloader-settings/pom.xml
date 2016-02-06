@@ -35,10 +35,10 @@
     <properties>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
-        <aether.version>1.0.2.v20150114</aether.version>
-        <mavendep.version>3.3.3</mavendep.version>
+        <aether.version>1.1.0</aether.version>
+        <mavendep.version>3.3.9</mavendep.version>
         <plexus.version>1.0-alpha-33</plexus.version>
-        <spring.boot.version>1.3.1.RELEASE</spring.boot.version>
+        <spring.boot.version>1.3.2.RELEASE</spring.boot.version>
     </properties>
 
 </project>
