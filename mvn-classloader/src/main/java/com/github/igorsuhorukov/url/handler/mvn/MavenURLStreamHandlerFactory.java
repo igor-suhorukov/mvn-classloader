@@ -31,7 +31,7 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
 
     @Override
     public URLStreamHandler createURLStreamHandler(String protocol) {
-        if (MVN_PROTOCOL.equals(protocol)) return new URLStreamHandler() {
+        if (MVN_PROTOCOL.equals(protocol)){ return new URLStreamHandler() {
             protected URLConnection openConnection(URL url) throws IOException {
                 try {
                     String repository = url.getQuery();
@@ -46,8 +46,7 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
                     throw new IOException(e);
                 }
             }
-        };
-        else{
+        };} else{
             if(urlStreamHandlerFactory !=null){
                 try {
                     return urlStreamHandlerFactory.createURLStreamHandler(protocol);
