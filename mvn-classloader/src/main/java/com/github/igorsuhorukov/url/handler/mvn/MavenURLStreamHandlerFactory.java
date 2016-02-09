@@ -2,6 +2,7 @@ package com.github.igorsuhorukov.url.handler.mvn;
 
 import com.github.smreed.dropship.ClassLoaderBuilder;
 import com.github.smreed.dropship.MavenClassLoader;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +42,7 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
                     } else {
                         classLoaderBuilder = MavenClassLoader.using(repository);
                     }
-                    return classLoaderBuilder.resolveArtifact(url.getPath()).openConnection();
+                    return classLoaderBuilder.resolveArtifact(getUrlPath(url)).openConnection();
                 } catch (Exception e) {
                     throw new IOException(e);
                 }
@@ -57,6 +58,14 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
             } else {
                 return null;
             }
+        }
+    }
+
+    private static String getUrlPath(URL url) {
+        if(StringUtils.hasText(url.getPath()) && url.getPath().startsWith("/")){
+            return url.getPath().substring(1);
+        } else {
+            return url.getPath();
         }
     }
 }

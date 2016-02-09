@@ -26,6 +26,7 @@
                         <option>-dontobfuscate</option>
                         <option>-ignorewarnings</option>
                         <option>-keep public class com.github.igorsuhorukov.AetherEngine{ *; }</option>
+                        <option>-keep public class com.github.igorsuhorukov.DefaultAetherGrapeEngine{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.grape.AetherGrapeEngineFactory{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.grape.GrapeEngineInstaller{ *; }</option>
                         <option>-keep public class org.springframework.boot.cli.compiler.grape.DependencyResolutionContext{ *; }</option>
