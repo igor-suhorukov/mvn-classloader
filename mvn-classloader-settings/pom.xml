@@ -9,7 +9,7 @@
     <groupId>com.github.igor-suhorukov</groupId>
     <artifactId>mvn-classloader-settings</artifactId>
     <packaging>pom</packaging>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.6</version>
 
     <developers>
         <developer>
