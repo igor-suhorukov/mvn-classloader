@@ -9,7 +9,7 @@ package org.springframework.util;
  *
  * <p>This class delivers some simple functionality that should really
  * be provided by the core Java {@code String} and {@link StringBuilder}
- * classes, such as the ability to {@link #replace} all occurrences of a given
+ * classes, such as the ability to {#replace} all occurrences of a given
  * substring in a target string. It also provides easy-to-use methods to convert
  * between delimited strings, such as CSV strings, and collections and arrays.
  *
