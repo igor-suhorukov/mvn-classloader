@@ -33,8 +33,8 @@
     </scm>
 
     <properties>
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <aether.version>1.1.0</aether.version>
         <mavendep.version>3.3.9</mavendep.version>
         <plexus.version>1.0-alpha-33</plexus.version>
