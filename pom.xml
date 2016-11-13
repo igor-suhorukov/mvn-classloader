@@ -8,7 +8,7 @@
     <groupId>com.github.igor-suhorukov</groupId>
 	<artifactId>mvn-classloader-aggregation</artifactId>
 	<packaging>pom</packaging>
-	<version>1.7</version>
+	<version>1.8-SNAPSHOT</version>
 	<modules>
         <module>mvn-classloader-settings</module>
         <module>dropship</module>
