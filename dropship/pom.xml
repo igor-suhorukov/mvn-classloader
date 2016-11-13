@@ -2,13 +2,13 @@
     <parent>
         <groupId>com.github.igor-suhorukov</groupId>
         <artifactId>mvn-classloader-settings</artifactId>
-        <version>1.8</version>
+        <version>1.9-SNAPSHOT</version>
         <relativePath>../mvn-classloader-settings</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dropship</artifactId>
     <packaging>jar</packaging>
-    <version>1.8</version>
+    <version>1.9-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
