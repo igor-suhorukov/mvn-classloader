@@ -1,12 +1,5 @@
 package com.github.igorsuhorukov.url.handler.mvn;
 
-import com.github.smreed.dropship.ClassLoaderBuilder;
-import com.github.smreed.dropship.MavenClassLoader;
-import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.util.logging.Logger;
 
@@ -17,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFactory{
 
-    final static private Logger logger = Logger.getLogger(MavenURLStreamHandlerFactory.class.getName());
+    private static final Logger logger = Logger.getLogger(MavenURLStreamHandlerFactory.class.getName());
 
     public static final String MVN_PROTOCOL = "mvn";
 
@@ -32,22 +25,9 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
 
     @Override
     public URLStreamHandler createURLStreamHandler(String protocol) {
-        if (MVN_PROTOCOL.equals(protocol)){ return new URLStreamHandler() {
-            protected URLConnection openConnection(URL url) throws IOException {
-                try {
-                    String repository = url.getQuery();
-                    ClassLoaderBuilder classLoaderBuilder;
-                    if (repository == null){
-                        classLoaderBuilder = MavenClassLoader.usingCentralRepo();
-                    } else {
-                        classLoaderBuilder = MavenClassLoader.using(repository);
-                    }
-                    return classLoaderBuilder.resolveArtifact(getUrlPath(url)).openConnection();
-                } catch (Exception e) {
-                    throw new IOException(e);
-                }
-            }
-        };} else{
+        if (MVN_PROTOCOL.equals(protocol)){
+            return new Handler();
+        } else{
             if(urlStreamHandlerFactory !=null){
                 try {
                     return urlStreamHandlerFactory.createURLStreamHandler(protocol);
@@ -58,14 +38,6 @@ public class MavenURLStreamHandlerFactory implements java.net.URLStreamHandlerFa
             } else {
                 return null;
             }
-        }
-    }
-
-    private static String getUrlPath(URL url) {
-        if(StringUtils.hasText(url.getPath()) && url.getPath().startsWith("/")){
-            return url.getPath().substring(1);
-        } else {
-            return url.getPath();
         }
     }
 }
