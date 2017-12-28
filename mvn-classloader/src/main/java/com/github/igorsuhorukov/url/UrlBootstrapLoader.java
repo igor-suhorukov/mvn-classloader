@@ -1,6 +1,9 @@
 package com.github.igorsuhorukov.url;
 
+import org.codehaus.plexus.util.IOUtil;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -15,6 +18,13 @@ public class UrlBootstrapLoader {
 
     public static void main(String[] args) throws Exception{
         String artifactUrl = System.getProperty("artifactUrl");
+        String artifactUrlReference = System.getProperty("artifactUrlReference");
+        if(artifactUrlReference!=null && !artifactUrlReference.isEmpty()){
+            if(artifactUrl!=null && !artifactUrl.isEmpty()){
+                throw new IllegalArgumentException("use either artifactUrl or artifactUrlReference system property");
+            }
+            artifactUrl = getReference(artifactUrlReference);
+        }
         if(artifactUrl==null || artifactUrl.isEmpty()){
             throw new IllegalArgumentException("System property artifactUrl is empty");
         }
@@ -57,5 +67,15 @@ public class UrlBootstrapLoader {
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    private static String getReference(String artifactUrlReference) throws IOException {
+        URL referenceUrl = new URL(artifactUrlReference);
+        InputStream referenceUrlStream = referenceUrl.openStream();
+        String reference = IOUtil.toString(referenceUrlStream);
+        if(reference==null || reference.isEmpty() || reference.contains("\n")){
+            throw new IllegalArgumentException("artifactUrlReference resource should be non empty");
+        }
+        return reference;
     }
 }
