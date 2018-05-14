@@ -21,8 +21,8 @@ public class LoadableURLStreamHandlerFactory implements java.net.URLStreamHandle
 
     final static private Logger logger = Logger.getLogger(LoadableURLStreamHandlerFactory.class.getName());
     public static final String HANDLER_FACTORT_ARTIFACT = "com.github.igor-suhorukov:%s-url-handler:LATEST";
-    private static final Set<String> SKIP_LIST = new TreeSet<String>(){{
-        add("mvn");add("file");add("jar");add("http");add("http");add("https");add("ftp");add("mailto");}};
+    static final Set<String> SKIP_LIST = new TreeSet<String>(){{
+        add("mvn");add("file");add("jar");add("http");add("https");add("ftp");add("mailto");}};
 
     private static LoadingCache<String, URLStreamHandlerFactory> urlStreamHandlerFactoryLoadingCache = CacheBuilder
             .newBuilder().build(new CacheLoader<String, URLStreamHandlerFactory>() {

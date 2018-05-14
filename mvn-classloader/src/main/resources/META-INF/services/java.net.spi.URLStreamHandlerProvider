@@ -1,0 +1,2 @@
+com.github.igorsuhorukov.url.handler.loadable.LoadableHandlerProvider
+com.github.igorsuhorukov.url.handler.mvn.MavenHandlerProvider
