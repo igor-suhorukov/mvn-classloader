@@ -42,6 +42,7 @@
                         <option>-keep public class jodd.util.ClassLoaderUtil{ *; }</option>
                         <option>-keep public class jodd.util.cl.ExtendedURLClassLoader{ *; }</option>
                         <option>-keep public class org.codehaus.spice.classman.runtime.JoinClassLoader{ *; }</option>
+                        <option>-libraryjars  &lt;java.home&gt;/jmods/java.base.jmod(!**.jar;!module-info.class)</option>
                     </options>
                     <assembly>
                         <inclusions>
@@ -63,9 +64,6 @@
                             </inclusion>
                         </inclusions>
                     </assembly>
-                    <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>
-                    </libs>
                 </configuration>
             </plugin>
         </plugins>

@@ -3,10 +3,20 @@ package com.github.smreed.dropship;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import org.codehaus.plexus.PlexusContainerException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.eclipse.aether.collection.DependencyCollectionException;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.DependencyResolutionException;
 
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static com.github.smreed.dropship.NotLogger.info;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -47,16 +57,22 @@ public final class Dropship {
   }
 
   public static void main(String[] args) throws Exception {
-    args = checkNotNull(args);
+    checkNotNull(args);
     checkArgument(args.length >= 2, "Must specify groupId:artifactId[:version] and classname!");
 
     info("Starting Dropship v%s", Settings.dropshipVersion());
 
-    String gav = resolveGav(args[0]);
+    String artifactLocator = args[0];
+    MavenDependency[] requestedDependencies = getMavenDependencies(artifactLocator);
+    if("justPrintDependencies".equals(args[1])){
+      List<URL> urls = classLoaderBuilder().getUrls(requestedDependencies);
+      urls.forEach(url -> {
+        System.out.println(url.toExternalForm());
+      });
+      return;
+    }
 
-    info("Requested %s, will load artifact and dependencies for %s.", args[0], gav);
-
-    URLClassLoader loader = classLoaderBuilder().forMavenCoordinates(gav);
+    URLClassLoader loader = classLoaderBuilder().forMavenCoordinates(requestedDependencies, ClassLoader.getPlatformClassLoader());
 
     System.setProperty("dropship.running", "true");
 
@@ -68,5 +84,24 @@ public final class Dropship {
 
     Iterable<String> mainArgs = Iterables.skip(ImmutableList.copyOf(args), 2);
     mainMethod.invoke(null, (Object) Iterables.toArray(mainArgs, String.class));
+  }
+
+  private static MavenDependency[] getMavenDependencies(String artifactLocator) {
+    List<MavenDependency> dependencies = new ArrayList<>();
+    String[] artifactGavItem = artifactLocator.split("\\|");
+    for(String gavString: artifactGavItem){
+      String gav = resolveGav(gavString);
+      info("Requested %s, will load artifact and dependencies for %s.", gavString, gav);
+      dependencies.add(new MavenDependency(gav));
+    }
+    MavenDependency[] requestedDependencies = dependencies.toArray(new MavenDependency[0]);
+    return requestedDependencies;
+  }
+
+  public static String[] resolveAndReturnFiles(String artifactLocator) throws PlexusContainerException,
+          DependencyCollectionException, ArtifactResolutionException, MalformedURLException,
+          ComponentLookupException, DependencyResolutionException {
+    MavenDependency[] requestedDependencies = getMavenDependencies(artifactLocator);
+    return classLoaderBuilder().getUrls(requestedDependencies).stream().map(URL::toExternalForm).toArray(String[]::new);
   }
 }

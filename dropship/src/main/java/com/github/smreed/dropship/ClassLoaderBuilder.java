@@ -83,18 +83,25 @@ public class ClassLoaderBuilder {
     public URLClassLoader forMavenCoordinates(MavenDependency[] dependencies, ClassLoader parent) {
         checkNotNull(dependencies);
         try {
-            ArrayList<URL> urls = new ArrayList<URL>();
-            for (MavenDependency mavenDependency : dependencies) {
-                urls.addAll(getArtifactUrlsCollection(mavenDependency.getGroupArtifactVersion(),
-                        mavenDependency.getExcludes()));
-            }
+            List<URL> urls = getUrls(dependencies);
             return new URLClassLoader(Iterables.toArray(urls, URL.class), parent);
         } catch (Exception e) {
             throw propagate(e);
         }
     }
 
-    public List<URL> getArtifactUrlsCollection(String groupArtifactVersion, Collection<String> excludes) throws Exception {
+    public List<URL> getUrls(MavenDependency[] dependencies) throws PlexusContainerException, DependencyCollectionException, ArtifactResolutionException, MalformedURLException, ComponentLookupException, DependencyResolutionException {
+        ArrayList<URL> urls = new ArrayList<>();
+        for (MavenDependency mavenDependency : dependencies) {
+            urls.addAll(getArtifactUrlsCollection(mavenDependency.getGroupArtifactVersion(),
+                    mavenDependency.getExcludes()));
+        }
+        return urls;
+    }
+
+    public List<URL> getArtifactUrlsCollection(String groupArtifactVersion, Collection<String> excludes)
+            throws PlexusContainerException, DependencyCollectionException, ArtifactResolutionException,
+                    ComponentLookupException, DependencyResolutionException, MalformedURLException {
         info("Collecting maven metadata.");
         CollectRequest collectRequest = createCollectRequestForGAV(groupArtifactVersion);
 

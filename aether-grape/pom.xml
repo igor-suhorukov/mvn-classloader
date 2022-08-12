@@ -41,6 +41,7 @@
                         <option>-keep public class org.springframework.util.StringUtils{ *; }</option>
                         <option>-keep public class org.springframework.util.ObjectUtils{ *; }</option>
                         <option>-keep public class com.github.igorsuhorukov.ClassLoaderUtil{ *; }</option>
+                        <option>-libraryjars  &lt;java.home&gt;/jmods/java.base.jmod(!**.jar;!module-info.class)</option>
                     </options>
                     <assembly>
                         <inclusions>
@@ -55,9 +56,6 @@
                             </inclusion>
                         </inclusions>
                     </assembly>
-                    <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>
-                    </libs>
                 </configuration>
             </plugin>
 
