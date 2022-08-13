@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -63,18 +64,14 @@ public final class Dropship {
     info("Starting Dropship v%s", Settings.dropshipVersion());
 
     String artifactLocator = args[0];
-    MavenDependency[] requestedDependencies = getMavenDependencies(artifactLocator);
     if("justPrintDependencies".equals(args[1])){
-      List<URL> urls = classLoaderBuilder().getUrls(requestedDependencies);
-      urls.forEach(url -> {
-        System.out.println(url.toExternalForm());
-      });
+      String[] urls = resolveAndReturnFiles(artifactLocator);
+      Arrays.asList(urls).forEach(System.out::println);
       return;
     }
 
+    MavenDependency[] requestedDependencies = getMavenDependencies(artifactLocator);
     URLClassLoader loader = classLoaderBuilder().forMavenCoordinates(requestedDependencies, ClassLoader.getPlatformClassLoader());
-
-    System.setProperty("dropship.running", "true");
 
     Class<?> mainClass = loader.loadClass(args[1]);
 
@@ -98,10 +95,12 @@ public final class Dropship {
     return requestedDependencies;
   }
 
-  public static String[] resolveAndReturnFiles(String artifactLocator) throws PlexusContainerException,
-          DependencyCollectionException, ArtifactResolutionException, MalformedURLException,
-          ComponentLookupException, DependencyResolutionException {
+  public static String[] resolveAndReturnFiles(String artifactLocator) {
     MavenDependency[] requestedDependencies = getMavenDependencies(artifactLocator);
-    return classLoaderBuilder().getUrls(requestedDependencies).stream().map(URL::toExternalForm).toArray(String[]::new);
+    try {
+      return classLoaderBuilder().getUrls(requestedDependencies).stream().map(URL::toExternalForm).toArray(String[]::new);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
