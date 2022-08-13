@@ -149,10 +149,19 @@ public class ClassLoaderBuilder {
         DependencyNode node = repositorySystem.collectDependencies(session, collectRequest).getRoot();
 
         DependencyFilter filter;
-        if (excludes != null && !excludes.isEmpty()) {
-            filter = new AndDependencyFilter(new ScopeDependencyFilter(), new PatternExclusionsDependencyFilter(excludes));
+        if(Boolean.getBoolean("dropship.remove_optional_and_provided")){
+            if (excludes != null && !excludes.isEmpty()) {
+                filter = new AndDependencyFilter(new FilterOptionalRuntimeProvided(),
+                        new PatternExclusionsDependencyFilter(excludes));
+            } else {
+                filter = new FilterOptionalRuntimeProvided();
+            }
         } else {
-            filter = new ScopeDependencyFilter();
+            if (excludes != null && !excludes.isEmpty()) {
+                filter = new PatternExclusionsDependencyFilter(excludes);
+            } else {
+                filter = new ScopeDependencyFilter();
+            }
         }
 
         DependencyRequest request = new DependencyRequest(node, filter);

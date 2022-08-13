@@ -3,21 +3,14 @@ package com.github.smreed.dropship;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import org.codehaus.plexus.PlexusContainerException;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.eclipse.aether.collection.DependencyCollectionException;
-import org.eclipse.aether.resolution.ArtifactResolutionException;
-import org.eclipse.aether.resolution.DependencyResolutionException;
 
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import static com.github.smreed.dropship.NotLogger.info;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -27,6 +20,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * https://github.com/kaffamobile/dropship
  */
 public final class Dropship {
+
+  public static final String DEPENDENCY_PATTERN = "groupId:artifactId[:extension[:classifier]]:version";
 
   private static ClassLoaderBuilder classLoaderBuilder() {
     Optional<String> override = Settings.mavenRepoUrl();
@@ -41,8 +36,8 @@ public final class Dropship {
   private static String resolveGav(String gav) {
     ImmutableList<String> tokens = ImmutableList.copyOf(Settings.GAV_SPLITTER.split(gav));
 
-    checkArgument(tokens.size() > 1, "Require groupId:artifactId[:version]");
-    checkArgument(tokens.size() < 4, "Require groupId:artifactId[:version]");
+    checkArgument(tokens.size() > 1, "Require " + DEPENDENCY_PATTERN);
+    checkArgument(tokens.size() < 6, "Require " + DEPENDENCY_PATTERN);
 
     if (tokens.size() > 2) {
       return gav;
@@ -59,7 +54,7 @@ public final class Dropship {
 
   public static void main(String[] args) throws Exception {
     checkNotNull(args);
-    checkArgument(args.length >= 2, "Must specify groupId:artifactId[:version] and classname!");
+    checkArgument(args.length >= 2, "Must specify " + DEPENDENCY_PATTERN + " and classname psvm 'main' method!");
 
     info("Starting Dropship v%s", Settings.dropshipVersion());
 
