@@ -78,7 +78,7 @@ public final class Dropship {
     mainMethod.invoke(null, (Object) Iterables.toArray(mainArgs, String.class));
   }
 
-  private static MavenDependency[] getMavenDependencies(String artifactLocator) {
+  public static MavenDependency[] getMavenDependencies(String artifactLocator) {
     List<MavenDependency> dependencies = new ArrayList<>();
     String[] artifactGavItem = artifactLocator.split("\\|");
     for(String gavString: artifactGavItem){
@@ -86,8 +86,7 @@ public final class Dropship {
       info("Requested %s, will load artifact and dependencies for %s.", gavString, gav);
       dependencies.add(new MavenDependency(gav));
     }
-    MavenDependency[] requestedDependencies = dependencies.toArray(new MavenDependency[0]);
-    return requestedDependencies;
+    return dependencies.toArray(new MavenDependency[0]);
   }
 
   public static String[] resolveAndReturnFiles(String artifactLocator) {
